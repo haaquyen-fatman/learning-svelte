@@ -3,15 +3,13 @@
   import Button from "./Button.svelte";
   import Card from "./Card.svelte";
   import RatingSelect from "./RatingSelect.svelte";
-  import { createEventDispatcher } from "svelte";
+  import { FeedbackStore } from "../stores";
 
   let text = "";
   let rating = 2;
   let btnDisabled = true;
   let message;
   let min = 10;
-
-  const dispatch = createEventDispatcher();
 
   const handleInput = () => {
     if (text.trim().length <= min) {
@@ -32,7 +30,9 @@
         text,
         rating: +rating,
       };
-      dispatch("add-feedback", newFeedback);
+      FeedbackStore.update((currentFeedback) => {
+        return [newFeedback, ...currentFeedback];
+      });
 
       text = "";
     }
